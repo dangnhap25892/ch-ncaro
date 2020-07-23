@@ -20,6 +20,25 @@
     <!--new -->
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+
+    
+  </head>
+  <body>
+    <!-- new-->
+    <div id="loginForm" style="margin-bottom: 30px " class="text-center">
+    <h3>CHƯƠNG TRÌNH CHƠI CỜ CARO </h3>
+    <h4>DÙNG SOCKET.IO & D3 JS</h4>
+    <h4>Nhập vào tên người chơi:</h4>
+    <input type="text" id="txtUsername"/>
+    <input type="button" value="Register" id="btnRegister">
+    <div id="boxContent"></div>
+    </div>
+    <!-- new-->
+    <ul id="messages"></ul>
+    <form action="">
+      <input id="m" autocomplete="off" /><button>Send</button>
+    </form>
+
     <script>
       $(function () {
         var socket = io();
@@ -181,25 +200,36 @@ socket.on("server-send-data", function (data) {
             })
     })
 */
+ const div = d3.select("body").append("div").attr("id", "content").style("text-align","center");
+    // create <svg>
+    const svg = div.append("svg").attr("width", 500).attr("height", 600);
+    //-------------------------------------------------------
+    let boxsize =50 // kich thuoc cua moi o vuong
+    let n= 10 // so luong o vuong tren 1 hang
+    for (let i = 0; i < n; i++) {
+        for (let j = 0; j < n; j++) {
+            // draw each chess field
+            const box = svg.append("rect")
+                .attr("x", i * boxsize)
+                .attr("y", j * boxsize)
+                .attr("width", boxsize)
+                .attr("height", boxsize)
+                .attr("id", "b" + i + j)
+                .style("stroke","black")
+                .on("click", function () {
+                    let selected = d3.select(this);
+                    socket.emit("su-kien-click", {x: selected.attr('x'), y: selected.attr('y')})
 
+                });
+            if ((i + j) % 2 === 0) {
+                box.attr("fill", "beige");
+            } else {
+                box.attr("fill", "beige");
+            }
+        }
+    }
     </script>
-    
-  </head>
-  <body>
-    <!-- new-->
-    <div id="loginForm" style="margin-bottom: 30px " class="text-center">
-    <h3>CHƯƠNG TRÌNH CHƠI CỜ CARO </h3>
-    <h4>DÙNG SOCKET.IO & D3 JS</h4>
-    <h4>Nhập vào tên người chơi:</h4>
-    <input type="text" id="txtUsername"/>
-    <input type="button" value="Register" id="btnRegister">
-    <div id="boxContent"></div>
-    </div>
-    <!-- new-->
-    <ul id="messages"></ul>
-    <form action="">
-      <input id="m" autocomplete="off" /><button>Send</button>
-    </form>
+    <!--
     <script>
     const div = d3.select("body").append("div").attr("id", "content").style("text-align","center");
     // create <svg>
@@ -230,5 +260,6 @@ socket.on("server-send-data", function (data) {
         }
     }
   </script>
+-->
   </body>
 </html>
